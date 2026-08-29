@@ -28,7 +28,14 @@ html {
 
 body {
   margin: 0;
-  background: var(--ground);
+  /* Moonlight. Painted on the page itself rather than on an element, so there
+     is no box for the falloff to clip against at any viewport size. */
+  background:
+    radial-gradient(58rem 38rem at 22% 4%,
+                    rgba(179, 168, 217, 0.11),
+                    rgba(179, 168, 217, 0) 58%),
+    var(--ground);
+  background-repeat: no-repeat;
   color: var(--ink);
   font-family: var(--serif);
   font-size: 1.0625rem;
@@ -46,25 +53,8 @@ main {
 /* ── masthead ───────────────────────────────────────────────────────── */
 
 .masthead {
-  position: relative;
   margin-bottom: 3.5rem;
 }
-
-/* moonlight behind the name — cheap, no image, no request */
-.masthead::before {
-  content: "";
-  position: absolute;
-  left: -2rem;
-  top: -3.5rem;
-  width: 16rem;
-  height: 16rem;
-  background: radial-gradient(circle at 30% 35%,
-              rgba(179, 168, 217, 0.13), rgba(179, 168, 217, 0) 62%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.masthead > * { position: relative; z-index: 1; }
 
 h1 {
   font-size: clamp(3.25rem, 13vw, 4.75rem);
