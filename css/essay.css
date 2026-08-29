@@ -1,0 +1,192 @@
+@charset "utf-8";
+
+/* ============================================================================
+   Reading view. Long-form prose gets a narrower measure, a larger optical
+   size, and none of the home page's furniture.
+   ========================================================================= */
+
+body.reading {
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.1875rem);
+  line-height: 1.72;
+  background: var(--ground);
+
+  & .page { max-width: 46rem; padding-block-end: 5rem; }
+  & .col  { max-width: 38rem; }
+}
+
+.backline {
+  padding-block: 1.75rem 0;
+  font: 400 0.8125rem/1 var(--mono);
+  letter-spacing: 0.05em;
+  color: var(--faint);
+
+  & span { margin-inline: 0.4rem; }
+  & a { border: none; color: var(--muted); &:hover { color: var(--accent); } }
+}
+
+.essay-head {
+  margin-block: 3.5rem 3rem;
+  padding-block-end: 2rem;
+  border-block-end: 1px solid var(--rule);
+
+  & h1 {
+    font-size: clamp(2rem, 1.4rem + 2.8vw, 3.1rem);
+    font-variation-settings: "opsz" 48;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin-block-end: 1rem;
+    text-wrap: balance;
+  }
+}
+
+.essay-sub {
+  margin-block-end: 1.25rem;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+.essay-meta {
+  margin: 0;
+  font: 400 0.8125rem/1.6 var(--mono);
+  letter-spacing: 0.04em;
+  color: var(--faint);
+}
+
+article {
+  color: var(--ink-soft);
+
+  & h2 {
+    margin-block: 3rem 1rem;
+    font-size: clamp(1.35rem, 1.1rem + 1vw, 1.7rem);
+    font-variation-settings: "opsz" 28;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+
+  & h3 {
+    margin-block: 2rem 0.6rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  & p { margin-block: 0 1.3rem; }
+
+  & strong { color: var(--ink); }
+  & em { color: var(--ink); }
+
+  & ul, & ol {
+    margin-block: 0 1.5rem;
+    padding-inline-start: 1.4rem;
+
+    & li { margin-block-end: 0.55rem; }
+    & li::marker { color: var(--accent-deep); }
+  }
+
+  & blockquote {
+    margin: 1.75rem 0;
+    padding: 0.15rem 0 0.15rem 1.35rem;
+    border-inline-start: 2px solid var(--hair);
+    color: var(--muted);
+    font-style: italic;
+
+    & p:last-child { margin-block-end: 0; }
+    & strong, & em { color: var(--ink-soft); }
+  }
+
+  & hr {
+    margin-block: 3rem;
+    border: 0;
+    border-block-start: 1px solid var(--rule);
+  }
+
+  & code {
+    font-family: var(--mono);
+    font-size: 0.875em;
+    padding: 0.12em 0.36em;
+    border-radius: 2px;
+    background: color-mix(in oklch, var(--ground-lift) 80%, transparent);
+    color: var(--ink);
+  }
+
+  & pre {
+    margin-block: 1.75rem;
+    padding: 1.1rem 1.2rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: color-mix(in oklch, var(--ground-lift) 70%, transparent);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+
+    & code { padding: 0; background: none; font-size: inherit; }
+  }
+
+  /* Tables in an essay are usually wide. Let them scroll rather than
+     squeezing the measure for everything else. */
+  & table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    margin-block: 1.75rem;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+
+    & th, & td {
+      padding: 0.6rem 1rem 0.6rem 0;
+      border-block-end: 1px solid color-mix(in oklch, var(--rule) 60%, transparent);
+      text-align: left;
+      vertical-align: baseline;
+    }
+    & th {
+      font: 500 0.7rem/1.4 var(--mono);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--faint);
+      white-space: nowrap;
+    }
+  }
+
+  /* python-markdown footnotes */
+  & .footnote {
+    margin-block-start: 3.5rem;
+    padding-block-start: 1.5rem;
+    border-block-start: 1px solid var(--rule);
+    font-size: 0.9375rem;
+    color: var(--muted);
+
+    & hr { display: none; }
+    & ol { padding-inline-start: 1.2rem; }
+  }
+  & .footnote-ref { font-size: 0.8em; vertical-align: super; border: none; }
+  & .footnote-backref { border: none; }
+}
+
+/* A long essay deserves a reading-progress cue that costs nothing. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    body.reading::after {
+      content: "";
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline-start: 0;
+      z-index: 50;
+      height: 2px;
+      width: 100%;
+      transform-origin: 0 50%;
+      background: linear-gradient(to right, var(--accent-deep), var(--accent));
+      animation: progress linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+
+@keyframes progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
